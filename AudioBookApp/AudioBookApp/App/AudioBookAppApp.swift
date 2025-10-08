@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct AudioBookAppApp: App {
+    
+    private let favourites = FavouritesManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            let podcastListView = AppComposer.composePodcastListView()
+            podcastListView
+                .environment(favourites)
         }
     }
 }
