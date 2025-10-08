@@ -10,7 +10,7 @@ struct PodcastResponse: Decodable {
     let hasNext: Bool
     let podcasts: [Podcast]
     let hasPrevious: Bool
-    let nextPageNumber, previousPageNumber: Int
+    let nextPageNumber, previousPageNumber, pageNumber: Int
 }
 
 struct Podcast: Decodable, Identifiable {

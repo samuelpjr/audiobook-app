@@ -21,7 +21,7 @@ enum HTTPMethod: String {
 }
 
 enum PodCastEndPoint {
-    case podcastList
+    case podcastList(page: Int)
 }
 
 extension PodCastEndPoint: Endpoint {
@@ -41,9 +41,17 @@ extension PodCastEndPoint: Endpoint {
         case .podcastList: return "/best_podcasts"
         }
     }
+
     
     var url: URL? {
-        URL(string: baseURLString + path)
+        switch self {
+        case .podcastList(let page):
+            var components = URLComponents(string: baseURLString + path)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            return components?.url
+        }
     }
     
     var headers: [String: String]? {

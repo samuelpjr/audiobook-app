@@ -28,7 +28,7 @@ struct ErrorState: View {
                 .padding()
             Button("Retry") {
                 Task {
-                  await viewModel.fetchPodcasts()
+                    await viewModel.loadInitialPage()
                 }
             }
             .buttonStyle(.borderedProminent)

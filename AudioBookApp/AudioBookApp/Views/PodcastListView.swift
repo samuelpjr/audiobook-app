@@ -22,9 +22,14 @@ struct PodcastListView: View {
                 LoadingIndicatorView()
             case .loaded:
                 List {
-                    ForEach(viewModel.podcasts) { podcast in
+                    ForEach(viewModel.displayedPodcasts) { podcast in
                         NavigationLink(destination: PodcastDetailView(podcast: podcast)) {
                             PodcastListRowView(podcast: podcast)
+                                .onAppear {
+                                    Task {
+                                        await viewModel.loadMoreIfNeeded(currentItem: podcast)
+                                    }
+                                }
                         }
                         .listRowSeparator(.hidden)
                     }
@@ -33,10 +38,12 @@ struct PodcastListView: View {
                 .listStyle(.plain)
             case .error(_):
                 ErrorState(viewModel: viewModel)
+            case .idle:
+                LoadingIndicatorView()
             }
         }
         .task {
-            await viewModel.fetchPodcasts()
+            await viewModel.loadInitialPage()
         }
     }
 }

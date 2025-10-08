@@ -5,9 +5,10 @@
 //  Created by Samuel Pinheiro Junior on 2025-10-07.
 //
 
+import Foundation
 
 protocol PodcastRepositoryProtocol {
-    @MainActor func executePodcasts() async throws -> [Podcast]
+    @MainActor func executePodcasts(page: Int) async throws -> PodcastResponse
 }
 
 @MainActor
@@ -19,8 +20,7 @@ class PodcastRepository: PodcastRepositoryProtocol {
         self.apiService = apiService
     }
     
-    func executePodcasts() async throws -> [Podcast] {
-        let podcastResponse: PodcastResponse = try await apiService.request(endpoint: .podcastList)
-        return podcastResponse.podcasts
+    func executePodcasts(page: Int) async throws -> PodcastResponse {
+        try await apiService.request(endpoint: .podcastList(page: page))
     }
 }

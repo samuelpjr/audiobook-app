@@ -12,6 +12,7 @@ enum ViewState: Equatable {
     case loading
     case loaded
     case error(String)
+    case idle
     
     var isLoading: Bool {
         if case .loading = self {
