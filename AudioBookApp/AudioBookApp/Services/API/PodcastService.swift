@@ -12,6 +12,10 @@ protocol APIServiceProtocol {
     @MainActor func request<T: Decodable>(endpoint: PodCastEndPoint) async throws -> T
 }
 
+/// Handles all network requests for fetching podcast data from ListenNotes API.
+/// Uses async/await with URLSession.
+///
+/// This service decodes JSON responses into strongly typed models using a JSONDecoder.
 class PodcastService: APIServiceProtocol {
     private let session: URLSession
     
@@ -19,6 +23,10 @@ class PodcastService: APIServiceProtocol {
         self.session = session
     }
     
+    /// Performs an API request using the provided endpoint.
+    /// - Parameter endpoint: The endpoint defining URL, method, and decoding strategy.
+    /// - Returns: A decoded object of type `T`.
+    /// - Throws: `APIError` if the URL is invalid, the request fails, or decoding fails.
     func request<T: Decodable>(endpoint: PodCastEndPoint) async throws -> T {
         guard let url = endpoint.url else {
             throw APIError.invalidURL

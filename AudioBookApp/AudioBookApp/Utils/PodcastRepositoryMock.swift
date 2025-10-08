@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+/// Mock to use on preview and tests
 class PodcastRepositoryMock: PodcastRepositoryProtocol {
     @MainActor
     func executePodcasts(page: Int) async throws -> PodcastResponse {

@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+
+/// A SwiftUI view that asynchronously loads and displays an image from a remote URL,
+/// with in-memory caching support to improve performance and reduce network usage.
+///
+/// `CachedAsyncImage` first checks whether the image exists in the shared `ImageCache`.
+/// If found, it immediately displays the cached image.
+/// Otherwise, it fetches the image from the provided URL using `URLSession`,
+/// stores it in the cache, and then updates the view.
 struct CachedAsyncImage<Content: View>: View {
     private let url: URL
     private let content: (Image) -> Content

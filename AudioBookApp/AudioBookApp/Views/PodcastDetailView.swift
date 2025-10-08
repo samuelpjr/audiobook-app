@@ -24,27 +24,9 @@ struct PodcastDetailView: View {
                     .font(.title).fontWeight(.bold)
                 Text(podcast.publisher)
                     .font(.subheadline).foregroundStyle(.gray)
-                AsyncImage(url: URL(string: podcast.image)) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                            .frame(width: 60, height: 60)
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 300, height: 300)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                    case .failure:
-                        Image(systemName: "photo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 160, height: 160)
-                            .foregroundColor(.gray)
-                    @unknown default:
-                        EmptyView()
-                    }
-                }
+                
+                podcastImage
+                
                 Button(buttonTitle) {
                     favourites.toggleFavourite(podcast)
                     scale = buttonSize
@@ -67,6 +49,30 @@ struct PodcastDetailView: View {
         }
         .onAppear {
             scale = buttonSize
+        }
+    }
+    
+    var podcastImage: some View {
+        AsyncImage(url: URL(string: podcast.image)) { phase in
+            switch phase {
+            case .empty:
+                ProgressView()
+                    .frame(width: 60, height: 60)
+            case .success(let image):
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 300, height: 300)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            case .failure:
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 160, height: 160)
+                    .foregroundColor(.gray)
+            @unknown default:
+                EmptyView()
+            }
         }
     }
     

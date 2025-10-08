@@ -21,21 +21,7 @@ struct PodcastListView: View {
             case .loading:
                 LoadingIndicatorView()
             case .loaded:
-                List {
-                    ForEach(viewModel.displayedPodcasts) { podcast in
-                        NavigationLink(destination: PodcastDetailView(podcast: podcast)) {
-                            PodcastListRowView(podcast: podcast)
-                                .onAppear {
-                                    Task {
-                                        await viewModel.loadMoreIfNeeded(currentItem: podcast)
-                                    }
-                                }
-                        }
-                        .listRowSeparator(.hidden)
-                    }
-                }
-                .navigationTitle("Podcasts")
-                .listStyle(.plain)
+                podcastListContent
             case .error(_):
                 ErrorState(viewModel: viewModel)
             case .idle:
@@ -45,6 +31,27 @@ struct PodcastListView: View {
         .task {
             await viewModel.loadInitialPage()
         }
+    }
+}
+
+// MARK: - View component
+extension PodcastListView {
+    var podcastListContent: some View {
+        List {
+            ForEach(viewModel.displayedPodcasts) { podcast in
+                NavigationLink(destination: PodcastDetailView(podcast: podcast)) {
+                    PodcastListRowView(podcast: podcast)
+                        .onAppear {
+                            Task {
+                                await viewModel.loadMoreIfNeeded(currentItem: podcast)
+                            }
+                        }
+                }
+                .listRowSeparator(.hidden)
+            }
+        }
+        .navigationTitle("Podcasts")
+        .listStyle(.plain)
     }
 }
 
